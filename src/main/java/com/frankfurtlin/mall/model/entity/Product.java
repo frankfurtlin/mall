@@ -3,9 +3,11 @@ package com.frankfurtlin.mall.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * <p>
@@ -15,6 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Frankfurtlin
  * @since 2022-04-22
  */
+@Data
 @ApiModel(value = "Product对象", description = "商品表")
 public class Product implements Serializable {
 
@@ -46,95 +49,9 @@ public class Product implements Serializable {
     private Integer status;
 
     @ApiModelProperty("商品创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty("商品更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-    public String getProductImage() {
-        return productImage;
-    }
-
-    public void setProductImage(String productImage) {
-        this.productImage = productImage;
-    }
-    public String getProductDetail() {
-        return productDetail;
-    }
-
-    public void setProductDetail(String productDetail) {
-        this.productDetail = productDetail;
-    }
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-    public Long getPrice() {
-        return price;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
-    }
-    public Long getStock() {
-        return stock;
-    }
-
-    public void setStock(Long stock) {
-        this.stock = stock;
-    }
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-            "id=" + id +
-            ", productName=" + productName +
-            ", productImage=" + productImage +
-            ", productDetail=" + productDetail +
-            ", categoryId=" + categoryId +
-            ", price=" + price +
-            ", stock=" + stock +
-            ", status=" + status +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-        "}";
-    }
 }

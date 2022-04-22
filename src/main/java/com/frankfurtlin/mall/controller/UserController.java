@@ -6,8 +6,10 @@ import com.frankfurtlin.mall.service.IUserService;
 import com.sun.org.apache.bcel.internal.generic.ISUB;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -31,8 +33,8 @@ public class UserController {
     IUserService iUserService;
 
     @ApiOperation("测试用户")
-    @GetMapping("/get")
-    public User getOne(){
-        return iUserService.getById(1);
+    @GetMapping("/test/{id}")
+    public User getOne(@ApiParam("用户id") @PathVariable String id){
+        return iUserService.getById(id);
     }
 }

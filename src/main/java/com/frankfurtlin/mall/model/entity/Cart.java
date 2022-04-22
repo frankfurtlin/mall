@@ -3,9 +3,11 @@ package com.frankfurtlin.mall.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * <p>
@@ -15,6 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Frankfurtlin
  * @since 2022-04-22
  */
+@Data
 @ApiModel(value = "Cart对象", description = "购物车表")
 public class Cart implements Serializable {
 
@@ -37,71 +40,9 @@ public class Cart implements Serializable {
     private Integer selected;
 
     @ApiModelProperty("购物车创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty("购物车更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-    public Integer getSelected() {
-        return selected;
-    }
-
-    public void setSelected(Integer selected) {
-        this.selected = selected;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-            "id=" + id +
-            ", userId=" + userId +
-            ", productId=" + productId +
-            ", quantity=" + quantity +
-            ", selected=" + selected +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-        "}";
-    }
 }

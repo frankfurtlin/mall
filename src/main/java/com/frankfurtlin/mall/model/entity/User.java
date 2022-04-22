@@ -3,9 +3,11 @@ package com.frankfurtlin.mall.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * <p>
@@ -15,6 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Frankfurtlin
  * @since 2022-04-22
  */
+@Data
 @ApiModel(value = "User对象", description = "用户表")
 public class User implements Serializable {
 
@@ -46,95 +49,9 @@ public class User implements Serializable {
     private Integer role;
 
     @ApiModelProperty("用户创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty("用户更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getSignature() {
-        return signature;
-    }
-
-    public void setSignature(String signature) {
-        this.signature = signature;
-    }
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-    public Integer getRole() {
-        return role;
-    }
-
-    public void setRole(Integer role) {
-        this.role = role;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-            "id=" + id +
-            ", username=" + username +
-            ", password=" + password +
-            ", phone=" + phone +
-            ", email=" + email +
-            ", signature=" + signature +
-            ", avatar=" + avatar +
-            ", role=" + role +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-        "}";
-    }
 }

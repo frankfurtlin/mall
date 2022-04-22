@@ -3,9 +3,11 @@ package com.frankfurtlin.mall.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * <p>
@@ -15,6 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Frankfurtlin
  * @since 2022-04-22
  */
+@Data
 @ApiModel(value = "Order对象", description = "订单表")
 public class Order implements Serializable {
 
@@ -52,144 +55,18 @@ public class Order implements Serializable {
     private Integer paymentType;
 
     @ApiModelProperty("订单付款时间")
-    private LocalDateTime paymentTime;
+    private Date paymentTime;
 
     @ApiModelProperty("订单发货时间")
-    private LocalDateTime deliveryTime;
+    private Date deliveryTime;
 
     @ApiModelProperty("订单结束时间")
-    private LocalDateTime receiveTime;
+    private Date receiveTime;
 
     @ApiModelProperty("订单创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty("订单更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Long getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(Long orderNo) {
-        this.orderNo = orderNo;
-    }
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    public Long getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(Long totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-    public String getReceiveName() {
-        return receiveName;
-    }
-
-    public void setReceiveName(String receiveName) {
-        this.receiveName = receiveName;
-    }
-    public String getReceiveAddress() {
-        return receiveAddress;
-    }
-
-    public void setReceiveAddress(String receiveAddress) {
-        this.receiveAddress = receiveAddress;
-    }
-    public String getReceivePhone() {
-        return receivePhone;
-    }
-
-    public void setReceivePhone(String receivePhone) {
-        this.receivePhone = receivePhone;
-    }
-    public Integer getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(Integer orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-    public Integer getPostage() {
-        return postage;
-    }
-
-    public void setPostage(Integer postage) {
-        this.postage = postage;
-    }
-    public Integer getPaymentType() {
-        return paymentType;
-    }
-
-    public void setPaymentType(Integer paymentType) {
-        this.paymentType = paymentType;
-    }
-    public LocalDateTime getPaymentTime() {
-        return paymentTime;
-    }
-
-    public void setPaymentTime(LocalDateTime paymentTime) {
-        this.paymentTime = paymentTime;
-    }
-    public LocalDateTime getDeliveryTime() {
-        return deliveryTime;
-    }
-
-    public void setDeliveryTime(LocalDateTime deliveryTime) {
-        this.deliveryTime = deliveryTime;
-    }
-    public LocalDateTime getReceiveTime() {
-        return receiveTime;
-    }
-
-    public void setReceiveTime(LocalDateTime receiveTime) {
-        this.receiveTime = receiveTime;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-            "id=" + id +
-            ", orderNo=" + orderNo +
-            ", userId=" + userId +
-            ", totalPrice=" + totalPrice +
-            ", receiveName=" + receiveName +
-            ", receiveAddress=" + receiveAddress +
-            ", receivePhone=" + receivePhone +
-            ", orderStatus=" + orderStatus +
-            ", postage=" + postage +
-            ", paymentType=" + paymentType +
-            ", paymentTime=" + paymentTime +
-            ", deliveryTime=" + deliveryTime +
-            ", receiveTime=" + receiveTime +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-        "}";
-    }
 }

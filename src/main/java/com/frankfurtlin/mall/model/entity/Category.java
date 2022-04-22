@@ -3,9 +3,11 @@ package com.frankfurtlin.mall.model.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * <p>
@@ -15,6 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Frankfurtlin
  * @since 2022-04-22
  */
+@Data
 @ApiModel(value = "Category对象", description = "目录表")
 public class Category implements Serializable {
 
@@ -37,71 +40,9 @@ public class Category implements Serializable {
     private Integer categoryOrder;
 
     @ApiModelProperty("目录创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @ApiModelProperty("目录更新时间")
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
-    public Integer getCategoryOrder() {
-        return categoryOrder;
-    }
-
-    public void setCategoryOrder(Integer categoryOrder) {
-        this.categoryOrder = categoryOrder;
-    }
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Category{" +
-            "id=" + id +
-            ", categoryName=" + categoryName +
-            ", type=" + type +
-            ", parentId=" + parentId +
-            ", categoryOrder=" + categoryOrder +
-            ", createTime=" + createTime +
-            ", updateTime=" + updateTime +
-        "}";
-    }
 }
