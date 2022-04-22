@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.frankfurtlin.mall.mapper.OrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.frankfurtlin.mall.model.entity.Order">
+        <id column="id" property="id" />
+        <result column="order_no" property="orderNo" />
+        <result column="user_id" property="userId" />
+        <result column="total_price" property="totalPrice" />
+        <result column="receive_name" property="receiveName" />
+        <result column="receive_address" property="receiveAddress" />
+        <result column="receive_phone" property="receivePhone" />
+        <result column="order_status" property="orderStatus" />
+        <result column="postage" property="postage" />
+        <result column="payment_type" property="paymentType" />
+        <result column="payment_time" property="paymentTime" />
+        <result column="delivery_time" property="deliveryTime" />
+        <result column="receive_time" property="receiveTime" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_no, user_id, total_price, receive_name, receive_address, receive_phone, order_status, postage, payment_type, payment_time, delivery_time, receive_time, create_time, update_time
+    </sql>
+
+</mapper>
