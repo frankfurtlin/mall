@@ -1,21 +1,17 @@
 package com.frankfurtlin.mall.controller;
 
 
+import com.frankfurtlin.mall.common.ApiRestResponse;
+import com.frankfurtlin.mall.exception.MallException;
+import com.frankfurtlin.mall.exception.MallExceptionEnum;
 import com.frankfurtlin.mall.model.entity.User;
 import com.frankfurtlin.mall.service.IUserService;
-import com.sun.org.apache.bcel.internal.generic.ISUB;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.jws.soap.SOAPBinding;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -36,5 +32,22 @@ public class UserController {
     @GetMapping("/test/{id}")
     public User getOne(@ApiParam("用户id") @PathVariable String id){
         return iUserService.getById(id);
+    }
+
+    @ApiOperation("用户注册")
+    @PostMapping("/register")
+    public ApiRestResponse<?> register(@ApiParam("用户名") @RequestParam String username, @ApiParam("用户密码") @RequestParam String password) throws MallException {
+        if(StringUtils.isEmpty(username)){
+            return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
+        }
+        if(StringUtils.isEmpty(password)){
+            return ApiRestResponse.error(MallExceptionEnum.NEED_PASSWORD);
+        }
+        if(password.length() < 8){
+            return ApiRestResponse.error(MallExceptionEnum.PASSWORD_TOO_SHORT);
+        }
+
+        iUserService.register(username, password);
+        return ApiRestResponse.success();
     }
 }
