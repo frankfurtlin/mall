@@ -2,6 +2,7 @@ package com.frankfurtlin.mall.controller;
 
 
 import com.frankfurtlin.mall.common.ApiRestResponse;
+import com.frankfurtlin.mall.common.Constant;
 import com.frankfurtlin.mall.exception.MallException;
 import com.frankfurtlin.mall.exception.MallExceptionEnum;
 import com.frankfurtlin.mall.model.entity.User;
@@ -12,6 +13,8 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * <p>
@@ -28,12 +31,6 @@ public class UserController {
     @Autowired
     IUserService iUserService;
 
-    @ApiOperation("测试用户")
-    @GetMapping("/test/{id}")
-    public User getOne(@ApiParam("用户id") @PathVariable String id){
-        return iUserService.getById(id);
-    }
-
     @ApiOperation("用户注册")
     @PostMapping("/register")
     public ApiRestResponse<?> register(@ApiParam("用户名") @RequestParam String username, @ApiParam("用户密码") @RequestParam String password) throws MallException {
@@ -43,11 +40,69 @@ public class UserController {
         if(StringUtils.isEmpty(password)){
             return ApiRestResponse.error(MallExceptionEnum.NEED_PASSWORD);
         }
-        if(password.length() < 8){
+        if(password.length() < Constant.LEAST_PASSWORD_LENGTH){
             return ApiRestResponse.error(MallExceptionEnum.PASSWORD_TOO_SHORT);
         }
 
         iUserService.register(username, password);
         return ApiRestResponse.success();
+    }
+
+    @ApiOperation("用户登录")
+    @PostMapping("/login")
+    public ApiRestResponse<?> login(@ApiParam("用户名") @RequestParam String username, @ApiParam("用户密码") @RequestParam String password, HttpSession httpSession) throws MallException {
+        if(StringUtils.isEmpty(username)){
+            return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
+        }
+        if(StringUtils.isEmpty(password)){
+            return ApiRestResponse.error(MallExceptionEnum.NEED_PASSWORD);
+        }
+
+        User user = iUserService.login(username, password);
+        user.setPassword(null);
+        httpSession.setAttribute(Constant.MALL_USER, user);
+        return ApiRestResponse.success(user);
+    }
+
+    @ApiOperation("更新用户信息")
+    @PostMapping("/update")
+    public ApiRestResponse<?> update(@ApiParam("用户信息") @RequestBody User user, HttpSession httpSession){
+        User user1 = (User)httpSession.getAttribute(Constant.MALL_USER);
+        if(user1 == null){
+            return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);
+        }
+
+        user.setId(user1.getId());
+        if(!iUserService.updateById(user)){
+            return ApiRestResponse.error(MallExceptionEnum.DATABASE_FAILED);
+        }
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("用户退出登录")
+    @PostMapping("/logout")
+    public ApiRestResponse<?> logout(HttpSession httpSession){
+        httpSession.removeAttribute(Constant.MALL_USER);
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("管理员登录")
+    @PostMapping("/backLogin")
+    public ApiRestResponse<?> backLogin(@ApiParam("管理员账号") @RequestParam String username, @ApiParam("管理员密码") @RequestParam String password, HttpSession httpSession) throws MallException {
+        if(StringUtils.isEmpty(username)){
+            return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
+        }
+        if(StringUtils.isEmpty(password)){
+            return ApiRestResponse.error(MallExceptionEnum.NEED_PASSWORD);
+        }
+
+        User user = iUserService.login(username, password);
+        if(!iUserService.checkAdminRole(user)){
+            return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
+        }
+
+        user.setPassword(null);
+        httpSession.setAttribute(Constant.MALL_USER, user);
+        return ApiRestResponse.success(user);
     }
 }

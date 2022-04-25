@@ -14,9 +14,15 @@ public enum MallExceptionEnum {
     NEED_PASSWORD(10002, "密码不能为空"),
     PASSWORD_TOO_SHORT(10003, "密码长度不能小于8位"),
     NAME_EXISTED(10004, "注册失败，用户已存在"),
-    INSERT_FAILED(10005, "数据库错误，插入失败"),
+    USERNAME_PASSWORD_ERROR(10005, "用户名或密码错误"),
+    NEED_LOGIN(10006, "用户未登录"),
+    NEED_ADMIN(10007, "用户无管理员权限"),
 
-    SYSTEM_ERROR(20001, "系统错误");
+    /**
+     * 系统异常
+     */
+    SYSTEM_ERROR(20001, "系统错误"),
+    DATABASE_FAILED(20002, "数据库错误");
 
     private Integer code;
     private String message;
