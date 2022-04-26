@@ -18,31 +18,31 @@ import lombok.Data;
  * @since 2022-04-22
  */
 @Data
-@ApiModel(value = "Category对象", description = "目录表")
+@ApiModel(value = "Category对象", description = "商品分类表")
 public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("目录主键")
+    @ApiModelProperty("商品分类主键")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty("目录名称")
+    @ApiModelProperty("商品分类名称")
     private String categoryName;
 
-    @ApiModelProperty("目录级别 1-一级目录 2-二级目录")
+    @ApiModelProperty("商品分类级别 1-一级目录 2-二级目录")
     private Integer type;
 
-    @ApiModelProperty("父目录id，一级目录父id为0")
+    @ApiModelProperty("商品父分类id，一级商品父分类id为0")
     private Integer parentId;
 
-    @ApiModelProperty("同级目录排序")
+    @ApiModelProperty("同级商品分类顺序")
     private Integer categoryOrder;
 
-    @ApiModelProperty("目录创建时间")
+    @ApiModelProperty("商品分类创建时间")
     private Date createTime;
 
-    @ApiModelProperty("目录更新时间")
+    @ApiModelProperty("商品分类更新时间")
     private Date updateTime;
 
 }

@@ -30,5 +30,19 @@ public interface IUserService extends IService<User> {
      */
     User login(String username, String password) throws MallException;
 
+    /**
+     * 检验用户是否有管理员权限
+     * @param user 用户信息
+     * @return true-是管理员 false-不是管理员
+     */
     boolean checkAdminRole(User user);
+
+    /**
+     * 修改用户密码
+     * @param user 用户信息
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @throws MallException 旧密码错误异常
+     */
+    void changePassword(User user, String oldPassword, String newPassword) throws MallException;
 }

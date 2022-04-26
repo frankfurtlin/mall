@@ -16,7 +16,8 @@ public enum MallExceptionEnum {
     NAME_EXISTED(10004, "注册失败，用户已存在"),
     USERNAME_PASSWORD_ERROR(10005, "用户名或密码错误"),
     NEED_LOGIN(10006, "用户未登录"),
-    NEED_ADMIN(10007, "用户无管理员权限"),
+    PASSWORD_ERROR(10007, "用户旧密码错误"),
+    NEED_ADMIN(10008, "用户无管理员权限"),
 
     /**
      * 系统异常

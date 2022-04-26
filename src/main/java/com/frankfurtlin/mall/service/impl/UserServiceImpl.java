@@ -9,7 +9,6 @@ import com.frankfurtlin.mall.mapper.UserMapper;
 import com.frankfurtlin.mall.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.frankfurtlin.mall.utils.Md5Utils;
-import com.sun.corba.se.impl.encoding.WrapperInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +66,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public boolean checkAdminRole(User user){
+        if(user == null){
+            return false;
+        }
         return user.getRole() == Constant.ROLE;
+    }
+
+    @Override
+    public void changePassword(User user, String oldPassword, String newPassword) throws MallException{
+        try {
+            if(!user.getPassword().equals(Md5Utils.getMd5String(oldPassword))){
+                throw new MallException(MallExceptionEnum.PASSWORD_ERROR);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            user.setPassword(Md5Utils.getMd5String(newPassword));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        userMapper.updateById(user);
     }
 }
