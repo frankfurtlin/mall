@@ -28,7 +28,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private UserMapper userMapper;
 
     @Override
-    public void register(String username, String password) throws MallException{
+    public void register(String username, String password){
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", username);
         User user = userMapper.selectOne(userQueryWrapper);
@@ -50,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public User login(String username, String password) throws MallException{
+    public User login(String username, String password){
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         try {
             userQueryWrapper.eq("username", username).eq("password", Md5Utils.getMd5String(password));
@@ -65,15 +65,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public boolean checkAdminRole(User user){
+    public boolean checkNotAdminRole(User user){
         if(user == null){
-            return false;
+            throw new MallException(MallExceptionEnum.NEED_LOGIN);
         }
-        return user.getRole() == Constant.ROLE;
+        return user.getRole() != Constant.ROLE;
     }
 
     @Override
-    public void changePassword(User user, String oldPassword, String newPassword) throws MallException{
+    public void changePassword(User user, String oldPassword, String newPassword){
         try {
             if(!user.getPassword().equals(Md5Utils.getMd5String(oldPassword))){
                 throw new MallException(MallExceptionEnum.PASSWORD_ERROR);

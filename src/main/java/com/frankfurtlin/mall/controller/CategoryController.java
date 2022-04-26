@@ -39,7 +39,7 @@ public class CategoryController {
     @PostMapping("/admin/add")
     public ApiRestResponse<?> add(@ApiParam("添加商品分类实体类") @RequestBody CategoryAddReq categoryAddReq, HttpSession httpSession){
         User user = (User)httpSession.getAttribute(Constant.MALL_USER);
-        if(!iUserService.checkAdminRole(user)){
+        if(iUserService.checkNotAdminRole(user)){
             return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
         }
 

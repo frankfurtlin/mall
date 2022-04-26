@@ -35,7 +35,7 @@ public class UserController {
 
     @ApiOperation("用户注册")
     @PostMapping("/register")
-    public ApiRestResponse<?> register(@ApiParam("用户名") @RequestParam String username, @ApiParam("用户密码") @RequestParam String password) throws MallException {
+    public ApiRestResponse<?> register(@ApiParam("用户名") @RequestParam String username, @ApiParam("用户密码") @RequestParam String password){
         if(StringUtils.isEmpty(username)){
             return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
         }
@@ -52,7 +52,7 @@ public class UserController {
 
     @ApiOperation("用户登录")
     @PostMapping("/login")
-    public ApiRestResponse<?> login(@ApiParam("用户名") @RequestParam String username, @ApiParam("用户密码") @RequestParam String password, HttpSession httpSession) throws MallException {
+    public ApiRestResponse<?> login(@ApiParam("用户名") @RequestParam String username, @ApiParam("用户密码") @RequestParam String password, HttpSession httpSession){
         if(StringUtils.isEmpty(username)){
             return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
         }
@@ -86,7 +86,7 @@ public class UserController {
 
     @ApiOperation("修改用户密码")
     @PostMapping("/password")
-    public ApiRestResponse<?> changePassword(@ApiParam("旧密码") @RequestParam String password, @ApiParam("新密码") @RequestParam String newPassword, HttpSession httpSession) throws MallException {
+    public ApiRestResponse<?> changePassword(@ApiParam("旧密码") @RequestParam String password, @ApiParam("新密码") @RequestParam String newPassword, HttpSession httpSession){
         User user = (User)httpSession.getAttribute(Constant.MALL_USER);
         if(user == null){
             return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);
@@ -106,7 +106,7 @@ public class UserController {
 
     @ApiOperation("管理员登录")
     @PostMapping("/backLogin")
-    public ApiRestResponse<?> backLogin(@ApiParam("管理员账号") @RequestParam String username, @ApiParam("管理员密码") @RequestParam String password, HttpSession httpSession) throws MallException {
+    public ApiRestResponse<?> backLogin(@ApiParam("管理员账号") @RequestParam String username, @ApiParam("管理员密码") @RequestParam String password, HttpSession httpSession){
         if(StringUtils.isEmpty(username)){
             return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
         }
@@ -115,7 +115,7 @@ public class UserController {
         }
 
         User user = iUserService.login(username, password);
-        if(!iUserService.checkAdminRole(user)){
+        if(iUserService.checkNotAdminRole(user)){
             return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
         }
 

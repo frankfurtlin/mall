@@ -6,7 +6,7 @@ package com.frankfurtlin.mall.exception;
  * @date 2022/4/24 10:50
  * 用户自定义异常类
  */
-public class MallException extends Exception{
+public class MallException extends RuntimeException{
     private Integer code;
     private String message;
 

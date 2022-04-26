@@ -19,7 +19,7 @@ public interface IUserService extends IService<User> {
      * @param password  用户密码
      * @throws MallException 抛出异常（用户名已存在、用户插入失败）
      */
-    void register(String username, String password) throws MallException;
+    void register(String username, String password);
 
     /**
      * 用户登录
@@ -28,14 +28,14 @@ public interface IUserService extends IService<User> {
      * @return 用户信息
      * @throws MallException 抛出异常（用户名或密码错误）
      */
-    User login(String username, String password) throws MallException;
+    User login(String username, String password);
 
     /**
-     * 检验用户是否有管理员权限
+     * 检验用户是否没有有管理员权限
      * @param user 用户信息
-     * @return true-是管理员 false-不是管理员
+     * @return true-不是管理员 false-是管理员
      */
-    boolean checkAdminRole(User user);
+    boolean checkNotAdminRole(User user);
 
     /**
      * 修改用户密码
@@ -44,5 +44,5 @@ public interface IUserService extends IService<User> {
      * @param newPassword 新密码
      * @throws MallException 旧密码错误异常
      */
-    void changePassword(User user, String oldPassword, String newPassword) throws MallException;
+    void changePassword(User user, String oldPassword, String newPassword);
 }
