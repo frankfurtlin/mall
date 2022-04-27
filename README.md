@@ -1,15 +1,15 @@
 # 工程简介
 基于SpringBoot的商城后台系统
-|        技术选型        | 版本    |
-| :--------------------: | ------- |
-|       SpringBoot       | 2.3.7   |
+|        技术选型        |  版本   |
+| :--------------------: | :-----: |
+|       SpringBoot       |  2.3.7  |
 |  MySQL-connector-java  | 8.0.22  |
-|      Mybatis-Plus      | 3.4.2   |
-| Mybatis-Plus-Generator | 3.5.1   |
-|        Swagger         | 3.0.0   |
+|      Mybatis-Plus      |  3.4.2  |
+| Mybatis-Plus-Generator |  3.5.1  |
+|        Swagger         |  3.0.0  |
 |         lombok         | 1.18.16 |
 |         log4j2         | 2.13.3  |
-|                        |         |
+|       validation       |  2.6.7  |
 |                        |         |
 
 
@@ -43,3 +43,6 @@
    - 商品分类实体类重构
    - 添加商品分类
 6. 2022-4-27
+   - 添加实体校验 整合Validation
+   - 修改商品分类（判重抛出错误信息）
+7. 2022-4-28

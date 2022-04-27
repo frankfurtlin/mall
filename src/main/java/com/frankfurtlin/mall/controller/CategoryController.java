@@ -1,12 +1,14 @@
 package com.frankfurtlin.mall.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.frankfurtlin.mall.common.ApiRestResponse;
 import com.frankfurtlin.mall.common.Constant;
 import com.frankfurtlin.mall.exception.MallExceptionEnum;
 import com.frankfurtlin.mall.model.entity.Category;
 import com.frankfurtlin.mall.model.entity.User;
 import com.frankfurtlin.mall.model.request.CategoryAddReq;
+import com.frankfurtlin.mall.model.request.CategoryUpdateReq;
 import com.frankfurtlin.mall.service.ICategoryService;
 import com.frankfurtlin.mall.service.IUserService;
 import io.swagger.annotations.Api;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -37,9 +40,8 @@ public class CategoryController {
 
     @ApiOperation("添加商品分类")
     @PostMapping("/admin/add")
-    public ApiRestResponse<?> add(@ApiParam("添加商品分类实体类") @RequestBody CategoryAddReq categoryAddReq, HttpSession httpSession){
-        User user = (User)httpSession.getAttribute(Constant.MALL_USER);
-        if(iUserService.checkNotAdminRole(user)){
+    public ApiRestResponse<?> add(@ApiParam("添加商品分类实体类") @Valid @RequestBody CategoryAddReq categoryAddReq, HttpSession httpSession){
+        if(iUserService.checkNotAdminRole(httpSession)){
             return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
         }
 
@@ -47,6 +49,29 @@ public class CategoryController {
         BeanUtils.copyProperties(categoryAddReq, category);
 
         if(!iCategoryService.save(category)){
+            return ApiRestResponse.error(MallExceptionEnum.DATABASE_FAILED);
+        }
+
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("修改商品分类")
+    @PostMapping("/admin/update")
+    public ApiRestResponse<?> update(@ApiParam("修改商品分类实体类") @Valid @RequestBody CategoryUpdateReq categoryUpdateReq, HttpSession httpSession){
+        if(iUserService.checkNotAdminRole(httpSession)){
+            return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
+        }
+
+        Category category = new Category();
+        BeanUtils.copyProperties(categoryUpdateReq, category);
+
+        QueryWrapper<Category> categoryQueryWrapper = new QueryWrapper<>();
+        categoryQueryWrapper.eq("category_name", category.getCategoryName());
+        if(iCategoryService.count(categoryQueryWrapper) != 0){
+            return ApiRestResponse.error(MallExceptionEnum.CATEGORY_NAME_EXISTED);
+        }
+
+        if(!iCategoryService.updateById(category)){
             return ApiRestResponse.error(MallExceptionEnum.DATABASE_FAILED);
         }
 

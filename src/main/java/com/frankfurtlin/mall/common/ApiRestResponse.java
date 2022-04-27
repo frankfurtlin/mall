@@ -32,7 +32,7 @@ public class ApiRestResponse<T> {
     private static final int OK_CODE = 10000;
     private static final String OK_MESSAGE = "SUCCESS";
 
-    ApiRestResponse(Integer code, String message){
+    private ApiRestResponse(Integer code, String message){
         this.code = code;
         this.message = message;
     }
@@ -50,6 +50,10 @@ public class ApiRestResponse<T> {
         ApiRestResponse<T> response = ApiRestResponse.success();
         response.setData(result);
         return response;
+    }
+
+    public static <T> ApiRestResponse<T> error(Integer code, String message){
+        return new ApiRestResponse<>(code, message);
     }
 
     public static <T> ApiRestResponse<T> error(MallException mallException){

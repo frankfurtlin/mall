@@ -4,6 +4,8 @@ import com.frankfurtlin.mall.exception.MallException;
 import com.frankfurtlin.mall.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * <p>
  * 用户表 服务类
@@ -36,6 +38,8 @@ public interface IUserService extends IService<User> {
      * @return true-不是管理员 false-是管理员
      */
     boolean checkNotAdminRole(User user);
+
+    boolean checkNotAdminRole(HttpSession httpSession);
 
     /**
      * 修改用户密码

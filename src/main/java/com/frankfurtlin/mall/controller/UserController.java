@@ -3,7 +3,6 @@ package com.frankfurtlin.mall.controller;
 
 import com.frankfurtlin.mall.common.ApiRestResponse;
 import com.frankfurtlin.mall.common.Constant;
-import com.frankfurtlin.mall.exception.MallException;
 import com.frankfurtlin.mall.exception.MallExceptionEnum;
 import com.frankfurtlin.mall.model.entity.User;
 import com.frankfurtlin.mall.model.request.UserUpdateReq;
@@ -17,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -68,7 +68,7 @@ public class UserController {
 
     @ApiOperation("更新用户信息")
     @PostMapping("/update")
-    public ApiRestResponse<?> update(@ApiParam("用户修改的个人信息") @RequestBody UserUpdateReq userUpdateReq, HttpSession httpSession){
+    public ApiRestResponse<?> update(@ApiParam("用户修改的个人信息") @Valid @RequestBody UserUpdateReq userUpdateReq, HttpSession httpSession){
         User user1 = (User)httpSession.getAttribute(Constant.MALL_USER);
         if(user1 == null){
             return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);

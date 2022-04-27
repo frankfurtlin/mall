@@ -12,6 +12,7 @@ import com.frankfurtlin.mall.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -70,6 +71,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new MallException(MallExceptionEnum.NEED_LOGIN);
         }
         return user.getRole() != Constant.ROLE;
+    }
+
+    @Override
+    public boolean checkNotAdminRole(HttpSession httpSession){
+        User user = (User)httpSession.getAttribute(Constant.MALL_USER);
+        return checkNotAdminRole(user);
     }
 
     @Override

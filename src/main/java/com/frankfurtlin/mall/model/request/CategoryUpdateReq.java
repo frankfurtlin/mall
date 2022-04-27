@@ -12,12 +12,15 @@ import javax.validation.constraints.Size;
 /**
  * @author Frankfurtlin
  * @version 1.0
- * @date 2022/4/26 10:20
- * 添加商品分类请求对象
+ * @date 2022/4/27 11:07
  */
 @Data
-@ApiModel(value = "CategoryAddReq对象", description = "添加商品分类请求对象")
-public class CategoryAddReq {
+@ApiModel(value = "CategoryUpdateReq对象", description = "更新商品分类请求对象")
+public class CategoryUpdateReq {
+    @NotNull(message = "商品分类id不能为空")
+    @ApiModelProperty("商品分类id")
+    private Integer id;
+
     @NotNull(message = "商品分类名称不能为空")
     @Size(min = 2, max = 5, message = "商品分类名称长度在2-5之间")
     @ApiModelProperty("商品分类名称")
