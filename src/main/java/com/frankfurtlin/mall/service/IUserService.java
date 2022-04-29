@@ -33,13 +33,11 @@ public interface IUserService extends IService<User> {
     User login(String username, String password);
 
     /**
-     * 检验用户是否没有有管理员权限
+     * 检验用户是否有管理员权限
      * @param user 用户信息
-     * @return true-不是管理员 false-是管理员
+     * @return true-是管理员 false-不是管理员
      */
-    boolean checkNotAdminRole(User user);
-
-    boolean checkNotAdminRole(HttpSession httpSession);
+    boolean checkAdminRole(User user);
 
     /**
      * 修改用户密码

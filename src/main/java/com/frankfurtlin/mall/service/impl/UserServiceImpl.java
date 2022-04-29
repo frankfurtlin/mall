@@ -66,17 +66,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public boolean checkNotAdminRole(User user){
+    public boolean checkAdminRole(User user){
         if(user == null){
             throw new MallException(MallExceptionEnum.NEED_LOGIN);
         }
-        return user.getRole() != Constant.ROLE;
-    }
-
-    @Override
-    public boolean checkNotAdminRole(HttpSession httpSession){
-        User user = (User)httpSession.getAttribute(Constant.MALL_USER);
-        return checkNotAdminRole(user);
+        return user.getRole() == Constant.ROLE;
     }
 
     @Override

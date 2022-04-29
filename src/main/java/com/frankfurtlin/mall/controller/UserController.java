@@ -115,7 +115,7 @@ public class UserController {
         }
 
         User user = iUserService.login(username, password);
-        if(iUserService.checkNotAdminRole(user)){
+        if(!iUserService.checkAdminRole(user)){
             return ApiRestResponse.error(MallExceptionEnum.NEED_ADMIN);
         }
 

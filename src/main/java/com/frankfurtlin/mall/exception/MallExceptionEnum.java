@@ -20,10 +20,15 @@ public enum MallExceptionEnum {
     NEED_ADMIN(10008, "用户无管理员权限"),
 
     /**
-     * 商品目录异常
+     * 用户传参异常
      */
     REQUEST_PARAM_ERROR(10009, "请求参数错误"),
+
+    /**
+     * 商品目录异常
+     */
     CATEGORY_NAME_EXISTED(10010, "商品目录已存在"),
+    CATEGORY_ID_NOT_EXISTED(10011, "商品目录id不存在"),
 
     /**
      * 系统异常

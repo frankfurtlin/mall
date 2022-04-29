@@ -10,7 +10,7 @@
 |         lombok         | 1.18.16 |
 |         log4j2         | 2.13.3  |
 |       validation       |  2.6.7  |
-|                        |         |
+|         Redis          |  2.3.6  |
 
 
 # 参考链接
@@ -20,6 +20,8 @@
 3. [SpringBoot整合Mybatis-Plus](https://www.cnblogs.com/liuyj-top/p/12976396.html)
 4. [SpringBoot整合Swagger3](https://segmentfault.com/a/1190000037455077)
 5. [SpringBoot使用DevTools热部署](https://blog.csdn.net/pan_junbiao/article/details/105840785)
+6. [SpringBoot整合Validation](https://blog.csdn.net/weixin_42236404/article/details/105653432)
+7. [SpringBoot整合Redis](https://wenku.baidu.com/view/aff2cfcbfbc75fbfc77da26925c52cc58ad69045.html)
 
    
 
@@ -46,3 +48,9 @@
    - 添加实体校验 整合Validation
    - 修改商品分类（判重抛出错误信息）
 7. 2022-4-28
+   - 添加统一管理员身份拦截器
+   - 删除商品分类
+   - 获取商品一级分类
+   - 获取商品子分类
+   - 整合 Redis 缓存商品分类
+8. 2022-4-29
