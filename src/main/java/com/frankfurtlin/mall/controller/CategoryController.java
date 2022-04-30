@@ -1,7 +1,5 @@
 package com.frankfurtlin.mall.controller;
 
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.frankfurtlin.mall.common.ApiRestResponse;
 import com.frankfurtlin.mall.exception.MallExceptionEnum;
 import com.frankfurtlin.mall.model.entity.Category;
@@ -11,7 +9,6 @@ import com.frankfurtlin.mall.service.ICategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,10 +33,8 @@ public class CategoryController {
     @ApiOperation("添加商品分类")
     @PostMapping("/admin/add")
     public ApiRestResponse<?> add(@ApiParam("添加商品分类实体类") @Valid @RequestBody CategoryAddReq categoryAddReq) {
-        Category category = new Category();
-        BeanUtils.copyProperties(categoryAddReq, category);
-
-        if (!iCategoryService.save(category)) {
+        List<Category> list = iCategoryService.addCategory(categoryAddReq);
+        if(list.isEmpty()){
             return ApiRestResponse.error(MallExceptionEnum.DATABASE_FAILED);
         }
 
@@ -49,16 +44,8 @@ public class CategoryController {
     @ApiOperation("修改商品分类")
     @PostMapping("/admin/update")
     public ApiRestResponse<?> update(@ApiParam("修改商品分类实体类") @Valid @RequestBody CategoryUpdateReq categoryUpdateReq) {
-        Category category = new Category();
-        BeanUtils.copyProperties(categoryUpdateReq, category);
-
-        QueryWrapper<Category> categoryQueryWrapper = new QueryWrapper<>();
-        categoryQueryWrapper.eq("category_name", category.getCategoryName());
-        if (iCategoryService.count(categoryQueryWrapper) != 0) {
-            return ApiRestResponse.error(MallExceptionEnum.CATEGORY_NAME_EXISTED);
-        }
-
-        if (!iCategoryService.updateById(category)) {
+        List<Category> list = iCategoryService.updateCategory(categoryUpdateReq);
+        if(list.isEmpty()){
             return ApiRestResponse.error(MallExceptionEnum.DATABASE_FAILED);
         }
 
@@ -68,11 +55,12 @@ public class CategoryController {
     @ApiOperation("删除商品分类")
     @PostMapping("/admin/delete")
     public ApiRestResponse<?> delete(@ApiParam("删除商品分类实体id") @RequestParam int id) {
-        if (iCategoryService.getById(id) == null) {
+        Category category = iCategoryService.getById(id);
+        if(category == null){
             return ApiRestResponse.error(MallExceptionEnum.CATEGORY_ID_NOT_EXISTED);
         }
 
-        if (!iCategoryService.removeById(id)) {
+        if (iCategoryService.deleteCategory(category) != 1) {
             return ApiRestResponse.error(MallExceptionEnum.DATABASE_FAILED);
         }
         return ApiRestResponse.success();
@@ -81,14 +69,14 @@ public class CategoryController {
     @ApiOperation("获取商品一级分类")
     @GetMapping("/get")
     public ApiRestResponse<?> get() {
-        List<Category> list = iCategoryService.getBaseCategory();
+        List<Category> list = iCategoryService.getCategory(0);
         return ApiRestResponse.success(list);
     }
 
     @ApiOperation("获取商品子分类")
     @PostMapping("/get")
-    public ApiRestResponse<?> get(@ApiParam("商品父分类id") @RequestParam int id) {
-        List<Category> list = iCategoryService.list(new QueryWrapper<Category>().eq("parent_id", id).orderByAsc("category_order"));
+    public ApiRestResponse<?> get(@ApiParam("商品父分类id") @RequestParam int parentId) {
+        List<Category> list = iCategoryService.getCategory(parentId);
         return ApiRestResponse.success(list);
     }
 }
