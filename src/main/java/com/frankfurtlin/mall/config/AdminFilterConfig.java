@@ -22,6 +22,7 @@ public class AdminFilterConfig {
         FilterRegistrationBean<AdminFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(adminFilter());
         filterRegistrationBean.addUrlPatterns("/mall/category/admin/*");
+        filterRegistrationBean.addUrlPatterns("/mall/product/admin/*");
         filterRegistrationBean.setName("adminFilterConfig");
         return filterRegistrationBean;
     }

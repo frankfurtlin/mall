@@ -23,7 +23,7 @@ public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("购物车id")
+    @ApiModelProperty("商品id")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 

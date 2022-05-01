@@ -31,6 +31,12 @@ public enum MallExceptionEnum {
     CATEGORY_ID_NOT_EXISTED(10011, "商品目录id不存在"),
 
     /**
+     * 商品异常
+     */
+    PRODUCT_NAME_EXISTED(10012, "商品已存在"),
+    PRODUCT_ID_NOT_EXISTED(10013, "商品id不存在"),
+
+    /**
      * 系统异常
      */
     SYSTEM_ERROR(20001, "系统错误"),

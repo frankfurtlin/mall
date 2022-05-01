@@ -2,6 +2,8 @@ package com.frankfurtlin.mall.service;
 
 import com.frankfurtlin.mall.model.entity.Product;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.frankfurtlin.mall.model.request.ProductAddReq;
+import com.frankfurtlin.mall.model.request.ProductUpdateReq;
 
 /**
  * <p>
@@ -13,4 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IProductService extends IService<Product> {
 
+    void addProduct(ProductAddReq productAddReq);
+
+    void updateProduct(ProductUpdateReq productUpdateReq);
 }
