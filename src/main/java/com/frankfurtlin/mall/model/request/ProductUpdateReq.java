@@ -42,12 +42,12 @@ public class ProductUpdateReq {
 
     @NotNull(message = "商品价格不能为空")
     @ApiModelProperty("商品价格 单位为分")
-    private Long price;
+    private Integer price;
 
     @NotNull(message = "商品库存不能为空")
     @ApiModelProperty("商品库存数量")
-    @Max(value = 10000, message = "商品库存不能超过10000个")
-    private Long stock;
+    @Max(value = 1000000, message = "商品库存不能超过1000000个")
+    private Integer stock;
 
     @NotNull(message = "商品状态不能为空")
     @ApiModelProperty("商品状态 0-下架 1-上架")

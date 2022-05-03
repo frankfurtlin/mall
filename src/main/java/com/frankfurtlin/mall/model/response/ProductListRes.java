@@ -1,30 +1,22 @@
-package com.frankfurtlin.mall.model.entity;
+package com.frankfurtlin.mall.model.response;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
-import java.util.Date;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * <p>
- * 商品表
- * </p>
- *
  * @author Frankfurtlin
- * @since 2022-04-22
+ * @version 1.0
+ * @date 2022/5/3 13:55
+ * 返回给用户的商品信息类
  */
+@ApiModel(value = "ProductListRes对象", description = "返回给用户的商品类")
 @Data
-@ApiModel(value = "Product对象", description = "商品表")
-public class Product implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class ProductListRes {
 
     @ApiModelProperty("商品id")
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty("商品名称")
@@ -41,17 +33,4 @@ public class Product implements Serializable {
 
     @ApiModelProperty("商品价格 单位为分")
     private Integer price;
-
-    @ApiModelProperty("商品库存数量")
-    private Integer stock;
-
-    @ApiModelProperty("商品状态 0-下架 1-上架")
-    private Integer status;
-
-    @ApiModelProperty("商品创建时间")
-    private Date createTime;
-
-    @ApiModelProperty("商品更新时间")
-    private Date updateTime;
-
 }

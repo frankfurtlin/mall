@@ -1,23 +1,24 @@
 package com.frankfurtlin.mall.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.frankfurtlin.mall.common.ApiRestResponse;
+import com.frankfurtlin.mall.common.Constant;
 import com.frankfurtlin.mall.exception.MallException;
 import com.frankfurtlin.mall.exception.MallExceptionEnum;
-import com.frankfurtlin.mall.model.entity.Category;
+import com.frankfurtlin.mall.model.dto.ProductQueryDto;
 import com.frankfurtlin.mall.model.entity.Product;
 import com.frankfurtlin.mall.mapper.ProductMapper;
-import com.frankfurtlin.mall.model.request.CategoryAddReq;
-import com.frankfurtlin.mall.model.request.CategoryUpdateReq;
 import com.frankfurtlin.mall.model.request.ProductAddReq;
+import com.frankfurtlin.mall.model.request.ProductListAdminReq;
 import com.frankfurtlin.mall.model.request.ProductUpdateReq;
+import com.frankfurtlin.mall.model.response.ProductListRes;
 import com.frankfurtlin.mall.service.IProductService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * <p>
@@ -56,6 +57,37 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         if(productMapper.updateById(product) != 1){
             throw new MallException(MallExceptionEnum.DATABASE_FAILED);
         }
+    }
+
+    @Override
+    public Product checkProductIdExisted(int id){
+        Product product = productMapper.selectById(id);
+        if(product == null){
+            throw new MallException(MallExceptionEnum.PRODUCT_ID_NOT_EXISTED);
+        }
+        return product;
+    }
+
+    @Override
+    public Page<Product> getPage(ProductQueryDto productQueryDto){
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+
+        queryWrapper.eq("category_id", productQueryDto.getCategoryId());
+        queryWrapper.gt("stock", productQueryDto.getMinStock());
+
+        if(productQueryDto.getStatus() != Constant.ALL_STATUS){
+            queryWrapper.eq("status", productQueryDto.getStatus());
+        }
+
+        if(productQueryDto.getKey() != null){
+            queryWrapper.like("product_name", productQueryDto.getKey());
+        }
+
+        if(productQueryDto.getOrderBy() != null){
+            queryWrapper.orderBy(true, productQueryDto.getOrderBy().getAsc(), productQueryDto.getOrderBy().getItem());
+        }
+
+        return productMapper.selectPage(new Page<>(productQueryDto.getPageNum(), productQueryDto.getPageSize()), queryWrapper);
     }
 
     private void checkProductNameExisted(String productName){

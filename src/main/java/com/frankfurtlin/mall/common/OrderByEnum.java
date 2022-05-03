@@ -11,7 +11,13 @@ public enum OrderByEnum {
      * 按价格排序
      */
     PRICE_ASC("price", true),
-    PRICE_DESC("price", false);
+    PRICE_DESC("price", false),
+
+    /**
+     * 按库存排序
+     */
+    STOCK_ASC("stock", true),
+    STOCK_DESC("stock", false);
 
     /**
      * 排序方式 排序项

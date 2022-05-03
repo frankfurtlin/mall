@@ -1,24 +1,27 @@
 package com.frankfurtlin.mall.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.frankfurtlin.mall.common.ApiRestResponse;
 import com.frankfurtlin.mall.exception.MallExceptionEnum;
+import com.frankfurtlin.mall.model.dto.ProductQueryDto;
 import com.frankfurtlin.mall.model.entity.Product;
 import com.frankfurtlin.mall.model.request.ProductAddReq;
+import com.frankfurtlin.mall.model.request.ProductListAdminReq;
 import com.frankfurtlin.mall.model.request.ProductListReq;
 import com.frankfurtlin.mall.model.request.ProductUpdateReq;
+import com.frankfurtlin.mall.model.response.ProductListRes;
 import com.frankfurtlin.mall.service.IProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,10 +58,7 @@ public class ProductController {
     @ApiOperation("删除商品")
     @PostMapping("/admin/delete")
     public ApiRestResponse<?> delete(@ApiParam("商品id") @RequestParam Integer id) {
-        Product product = iProductService.getById(id);
-        if(product == null){
-            return ApiRestResponse.error(MallExceptionEnum.PRODUCT_ID_NOT_EXISTED);
-        }
+        iProductService.checkProductIdExisted(id);
 
         if (!iProductService.removeById(id)) {
             return ApiRestResponse.error(MallExceptionEnum.DATABASE_FAILED);
@@ -72,10 +72,7 @@ public class ProductController {
         List<Product> list = new ArrayList<>();
 
         for (int id : ids){
-            Product product = iProductService.getById(id);
-            if(product == null){
-                return ApiRestResponse.error(MallExceptionEnum.PRODUCT_ID_NOT_EXISTED);
-            }
+            Product product = iProductService.checkProductIdExisted(id);
             product.setStatus(status);
             list.add(product);
         }
@@ -88,30 +85,60 @@ public class ProductController {
 
     @ApiOperation("根据商品目录分页查询商品")
     @PostMapping("/admin/list")
-    public ApiRestResponse<?> list(@ApiParam("商品查询实体类") @Valid @RequestBody ProductListReq productListReq) {
-        QueryWrapper<Product> queryWrapper = new QueryWrapper<Product>().eq("category_id", productListReq.getCategoryId());
+    public ApiRestResponse<?> adminList(@ApiParam("商品查询实体类") @Valid @RequestBody ProductListAdminReq productListAdminReq) {
+        ProductQueryDto productQueryDto = new ProductQueryDto();
+        BeanUtils.copyProperties(productListAdminReq, productQueryDto);
+        productQueryDto.setMinStock(-1);
 
-        if(productListReq.getOrderBy() != null){
-            queryWrapper.orderBy(true, productListReq.getOrderBy().getAsc(), productListReq.getOrderBy().getItem());
-        }
-        if(productListReq.getKey() != null){
-            queryWrapper.like("product_name", productListReq.getKey());
-        }
+        return ApiRestResponse.success(iProductService.getPage(productQueryDto));
+    }
 
-        IPage<Product> productPage = iProductService.page(new Page<>(productListReq.getPageNum(), productListReq.getPageSize()), queryWrapper);
+    @ApiOperation("管理员查询商品详情")
+    @PostMapping("/admin/details")
+    public ApiRestResponse<?> adminDetails(@ApiParam("商品id") @RequestParam Integer id) {
+        Product product = iProductService.checkProductIdExisted(id);
+
+        return ApiRestResponse.success(product);
+    }
+
+    @ApiOperation("根据商品目录分页查询商品")
+    @PostMapping("/list")
+    public ApiRestResponse<?> userList(@ApiParam("商品查询实体类") @Valid @RequestBody ProductListReq productListReq) {
+
+        ProductQueryDto productQueryDto = new ProductQueryDto();
+        BeanUtils.copyProperties(productListReq, productQueryDto);
+        //设置查询条件：库存量大于0、在上架的商品
+        productQueryDto.setMinStock(0);
+        productQueryDto.setStatus(1);
+
+        IPage<Product> productPage = iProductService.getPage(productQueryDto);
+
+        //隐去商品状态、库存、商品上架时间、商品修改时间
+        for(Product product : productPage.getRecords()){
+            product.setStatus(-1);
+            product.setStock(-1);
+            product.setCreateTime(new Date());
+            product.setUpdateTime(new Date());
+        }
 
         return ApiRestResponse.success(productPage);
     }
 
-    @ApiOperation("查询商品详情")
-    @PostMapping("/admin/details")
-    public ApiRestResponse<?> detail(@ApiParam("商品id") @RequestParam Integer id) {
-        Product product = iProductService.getById(id);
-        if(product == null){
+    @ApiOperation("用户查询商品详情")
+    @PostMapping("/details")
+    public ApiRestResponse<?> userDetails(@ApiParam("商品id") @RequestParam Integer id) {
+        Product product = iProductService.checkProductIdExisted(id);
+
+        // 若查询的商品未上架，返回商品id不存在
+        if(product.getStatus() == 0){
             return ApiRestResponse.error(MallExceptionEnum.PRODUCT_ID_NOT_EXISTED);
         }
 
-        return ApiRestResponse.success(product);
+        ProductListRes productListRes = new ProductListRes();
+        BeanUtils.copyProperties(product, productListRes);
+        System.out.println(productListRes);
+
+        return ApiRestResponse.success(productListRes);
     }
 
 }

@@ -25,4 +25,9 @@ public class Constant {
      * 管理员角色
      */
     public static final int ROLE = 0;
+
+    /**
+     * 商品状态 -1-所有状态 0-未上架 1-已上架
+     */
+    public static final int ALL_STATUS = -1;
 }
