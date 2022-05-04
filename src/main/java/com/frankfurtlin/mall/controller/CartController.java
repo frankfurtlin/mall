@@ -1,9 +1,14 @@
 package com.frankfurtlin.mall.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import com.frankfurtlin.mall.common.ApiRestResponse;
+import com.frankfurtlin.mall.filter.UserFilter;
+import com.frankfurtlin.mall.service.ICartService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -13,8 +18,56 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Frankfurtlin
  * @since 2022-04-22
  */
+@Api(tags = "购物车管理")
 @RestController
 @RequestMapping("/mall/cart")
 public class CartController {
 
+    @Autowired
+    private ICartService iCartService;
+
+    @ApiOperation("用户查询购物车列表")
+    @GetMapping("/list")
+    public ApiRestResponse<?> list(){
+
+        return ApiRestResponse.success(iCartService.listCart(UserFilter.currentUser.getId()));
+    }
+
+    @ApiOperation("用户新增或更新购物车商品数量")
+    @PostMapping("/update")
+    public ApiRestResponse<?> update(@ApiParam("商品id") @RequestParam("product_id") Long productId, @ApiParam("添加的数量") @RequestParam int count){
+        Long userId = UserFilter.currentUser.getId();
+
+        return ApiRestResponse.success(iCartService.updateCart(userId, productId, count));
+    }
+
+    @ApiOperation("用户删除购物车某项商品")
+    @PostMapping("/delete")
+    public ApiRestResponse<?> delete(@ApiParam("商品id") @RequestParam("product_id") Long productId){
+        Long userId = UserFilter.currentUser.getId();
+
+        iCartService.deleteCart(userId, productId);
+
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("用户更改购物车某项商品选中状态")
+    @PostMapping("/select")
+    public ApiRestResponse<?> select(@ApiParam("商品id") @RequestParam("product_id") Long productId, @ApiParam("是否选择该商品") @RequestParam boolean selected){
+        Long userId = UserFilter.currentUser.getId();
+
+        iCartService.selectCart(userId, productId, selected);
+
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("用户是否全选购物车")
+    @PostMapping("/selectAll")
+    public ApiRestResponse<?> selectAll(@ApiParam("是否选择该商品") @RequestParam boolean selected){
+        Long userId = UserFilter.currentUser.getId();
+
+        iCartService.selectAllCart(userId, selected);
+
+        return ApiRestResponse.success();
+    }
 }

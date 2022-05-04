@@ -4,7 +4,6 @@ import com.frankfurtlin.mall.common.Constant;
 import com.frankfurtlin.mall.model.entity.User;
 import com.frankfurtlin.mall.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.*;
 import javax.servlet.http.*;

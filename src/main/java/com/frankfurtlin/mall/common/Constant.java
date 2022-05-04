@@ -30,4 +30,11 @@ public class Constant {
      * 商品状态 -1-所有状态 0-未上架 1-已上架
      */
     public static final int ALL_STATUS = -1;
+    public static final int STATUS_SALE = 1;
+
+    /**
+     * 商品是否被选中
+     */
+    public static final int SELECTED_TRUE = 1;
+    public static final int SELECTED_FALSE = 0;
 }

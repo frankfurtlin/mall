@@ -37,6 +37,13 @@ public enum MallExceptionEnum {
     PRODUCT_ID_NOT_EXISTED(10013, "商品id不存在"),
 
     /**
+     * 购物车异常
+     */
+    PRODUCT_NOT_ENOUGH(10014, "商品库存不够"),
+    PRODUCT_NOT_ON_SALE(10015, "商品未在出售"),
+    PRODUCT_NOT_IN_CART(10016, "商品不在购物车中"),
+
+    /**
      * 系统异常
      */
     SYSTEM_ERROR(20001, "系统错误"),

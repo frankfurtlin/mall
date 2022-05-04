@@ -4,6 +4,7 @@ package com.frankfurtlin.mall.controller;
 import com.frankfurtlin.mall.common.ApiRestResponse;
 import com.frankfurtlin.mall.common.Constant;
 import com.frankfurtlin.mall.exception.MallExceptionEnum;
+import com.frankfurtlin.mall.filter.UserFilter;
 import com.frankfurtlin.mall.model.entity.User;
 import com.frankfurtlin.mall.model.request.UserUpdateReq;
 import com.frankfurtlin.mall.service.IUserService;
@@ -69,15 +70,11 @@ public class UserController {
     @ApiOperation("更新用户信息")
     @PostMapping("/update")
     public ApiRestResponse<?> update(@ApiParam("用户修改的个人信息") @Valid @RequestBody UserUpdateReq userUpdateReq, HttpSession httpSession){
-        User user1 = (User)httpSession.getAttribute(Constant.MALL_USER);
-        if(user1 == null){
-            return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);
-        }
 
         User user = new User();
         BeanUtils.copyProperties(userUpdateReq, user);
 
-        user.setId(user1.getId());
+        user.setId(UserFilter.currentUser.getId());
         if(!iUserService.updateById(user)){
             return ApiRestResponse.error(MallExceptionEnum.DATABASE_FAILED);
         }
@@ -87,12 +84,8 @@ public class UserController {
     @ApiOperation("修改用户密码")
     @PostMapping("/password")
     public ApiRestResponse<?> changePassword(@ApiParam("旧密码") @RequestParam String password, @ApiParam("新密码") @RequestParam String newPassword, HttpSession httpSession){
-        User user = (User)httpSession.getAttribute(Constant.MALL_USER);
-        if(user == null){
-            return ApiRestResponse.error(MallExceptionEnum.NEED_LOGIN);
-        }
 
-        user = iUserService.getById(user.getId());
+        User user = iUserService.getById(UserFilter.currentUser.getId());
         iUserService.changePassword(user, password, newPassword);
         return ApiRestResponse.success();
     }
