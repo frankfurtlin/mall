@@ -34,7 +34,7 @@ public class Order implements Serializable {
     private Long userId;
 
     @ApiModelProperty("订单总价格")
-    private Long totalPrice;
+    private Integer totalPrice;
 
     @ApiModelProperty("收货人姓名")
     private String receiveName;

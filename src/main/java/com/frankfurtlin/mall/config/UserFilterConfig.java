@@ -24,6 +24,7 @@ public class UserFilterConfig {
         filterRegistrationBean.addUrlPatterns("/mall/user/update");
         filterRegistrationBean.addUrlPatterns("/mall/user/password");
         filterRegistrationBean.addUrlPatterns("/mall/cart/*");
+        filterRegistrationBean.addUrlPatterns("/mall/order/*");
         filterRegistrationBean.setName("userFilterConfig");
         return filterRegistrationBean;
     }
