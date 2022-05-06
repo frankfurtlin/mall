@@ -44,6 +44,11 @@ public enum MallExceptionEnum {
     PRODUCT_NOT_IN_CART(10016, "商品不在购物车中"),
 
     /**
+     * 订单异常
+     */
+    PERSON_CART_EMPTY(10017, "购物车没有勾选商品"),
+
+    /**
      * 系统异常
      */
     SYSTEM_ERROR(20001, "系统错误"),

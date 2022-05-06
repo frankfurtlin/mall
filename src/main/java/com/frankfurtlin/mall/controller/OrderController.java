@@ -3,9 +3,11 @@ package com.frankfurtlin.mall.controller;
 
 import com.frankfurtlin.mall.common.ApiRestResponse;
 import com.frankfurtlin.mall.model.request.OrderCreateByCartReq;
+import com.frankfurtlin.mall.service.IOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,10 +28,13 @@ import javax.validation.Valid;
 @RequestMapping("/mall/order")
 public class OrderController {
 
+    @Autowired
+    private IOrderService iOrderService;
+
     @ApiOperation("根据购物车创建订单")
     @PostMapping("/createByCart")
     public ApiRestResponse<?> createByCart(@Valid @ApiParam("订单个人信息") @RequestBody OrderCreateByCartReq orderCreateByCartReq){
 
-        return ApiRestResponse.success();
+        return ApiRestResponse.success(iOrderService.createByCart(orderCreateByCartReq));
     }
 }

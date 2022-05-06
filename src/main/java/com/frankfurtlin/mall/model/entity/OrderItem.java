@@ -25,7 +25,7 @@ public class OrderItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("订单项目id")
+    @ApiModelProperty("订单商品表id")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
@@ -39,16 +39,16 @@ public class OrderItem implements Serializable {
     private String productName;
 
     @ApiModelProperty("订单商品图片")
-    private String productImg;
+    private String productImage;
 
     @ApiModelProperty("订单商品单价(分)--下单时价格")
-    private Long unitPrice;
+    private Integer unitPrice;
 
     @ApiModelProperty("订单商品数量")
-    private Long quantity;
+    private Integer quantity;
 
     @ApiModelProperty("订单商品总价")
-    private Long totalPrice;
+    private Integer totalPrice;
 
     @ApiModelProperty("订单商品创建时间")
     private Date createTime;

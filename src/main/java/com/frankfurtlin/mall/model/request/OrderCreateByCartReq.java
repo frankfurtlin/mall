@@ -30,4 +30,10 @@ public class OrderCreateByCartReq {
     @Size(min = 11, max = 11, message = "收货人手机号错误")
     @ApiModelProperty("收货人手机号")
     private String receivePhone;
+
+    @ApiModelProperty("订单状态 0-已取消 1-未支付 2-已支付 3-已发货 4-已送达 5-已接受")
+    private Integer orderStatus = 1;
+
+    @ApiModelProperty("商品邮费")
+    private Integer postage = 0;
 }

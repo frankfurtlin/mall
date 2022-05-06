@@ -15,7 +15,7 @@ public class OrderCodeFactory {
      * 获取16位订单号
      * @return 订单号
      */
-    public String getOrderCode(){
+    public static String getOrderCode(){
         // 开头两位整数，标识机器
         String machineId = "11";
 
@@ -23,6 +23,7 @@ public class OrderCodeFactory {
         SimpleDateFormat sdf = new SimpleDateFormat("MMdd");
         String dayTime = sdf.format(new Date());
 
+        // 后 10 位 UUID
         int code = Math.abs(UUID.randomUUID().toString().hashCode());
 
         return machineId + dayTime + String.format("%010d", code);

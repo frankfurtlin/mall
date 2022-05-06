@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,6 +19,7 @@ import lombok.Data;
  * @since 2022-04-22
  */
 @Data
+@TableName("mall_order")
 @ApiModel(value = "Order对象", description = "订单表")
 public class Order implements Serializable {
 
@@ -28,7 +30,7 @@ public class Order implements Serializable {
     private Long id;
 
     @ApiModelProperty("订单号")
-    private Long orderNo;
+    private String orderNo;
 
     @ApiModelProperty("用户id")
     private Long userId;

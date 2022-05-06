@@ -31,8 +31,8 @@ public class ProductQueryDto {
     private String key;
 
     @ApiModelProperty("商品状态 0-下架 1-上架 2-所有状态")
-    private int status;
+    private Integer status;
 
     @ApiModelProperty("商品的最小库存")
-    private int minStock;
+    private Integer minStock;
 }
