@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.frankfurtlin.mall.common.Constant;
 import com.frankfurtlin.mall.exception.MallException;
 import com.frankfurtlin.mall.exception.MallExceptionEnum;
+import com.frankfurtlin.mall.filter.UserFilter;
 import com.frankfurtlin.mall.mapper.ProductMapper;
 import com.frankfurtlin.mall.model.entity.Cart;
 import com.frankfurtlin.mall.mapper.CartMapper;
@@ -36,7 +37,9 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     private ProductMapper productMapper;
 
     @Override
-    public List<CartListRes> listCart(Long userId){
+    public List<CartListRes> listCart(){
+        Long userId = UserFilter.currentUser.getId();
+
         List<CartListRes> list = new ArrayList<>();
 
         List<Cart> carts = cartMapper.selectList(new QueryWrapper<Cart>().eq("user_id", userId));
@@ -55,7 +58,9 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     }
 
     @Override
-    public CartListRes updateCart(Long userId, Long productId, int count){
+    public CartListRes updateCart(Long productId, int count){
+        Long userId = UserFilter.currentUser.getId();
+
         Product product = productMapper.selectById(productId);
 
         // 商品未在售 报异常
@@ -96,7 +101,9 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     }
 
     @Override
-    public void deleteCart(Long userId, Long productId){
+    public void deleteCart(Long productId){
+        Long userId = UserFilter.currentUser.getId();
+
         Cart queryCart = getCartProduct(userId, productId);
 
         if(queryCart == null){
@@ -110,7 +117,9 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     }
 
     @Override
-    public void selectCart(Long userId, Long productId, boolean selected){
+    public void selectCart(Long productId, boolean selected){
+        Long userId = UserFilter.currentUser.getId();
+
         Cart queryCart = getCartProduct(userId, productId);
 
         if(queryCart == null){
@@ -132,7 +141,9 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     }
 
     @Override
-    public void selectAllCart(Long userId, boolean selected){
+    public void selectAllCart(boolean selected){
+        Long userId = UserFilter.currentUser.getId();
+
         List<Cart> carts = cartMapper.selectList(new QueryWrapper<Cart>().eq("user_id", userId));
         for(Cart cart : carts){
             // 根据状态选择购物车是否被选中
