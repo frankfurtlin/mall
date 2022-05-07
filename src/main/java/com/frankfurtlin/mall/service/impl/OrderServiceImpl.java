@@ -128,6 +128,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("order_no", orderNo));
 
+        if(order == null){
+            throw new MallException(MallExceptionEnum.ORDER_NOT_EXISTED);
+        }
+        if(!order.getUserId().equals(UserFilter.currentUser.getId())){
+            throw new MallException(MallExceptionEnum.ORDER_NOT_BELONG_YOU);
+        }
+
         BeanUtils.copyProperties(order, orderDetailRes);
         orderDetailRes.setOrderItemList(orderItemMapper.selectList(new QueryWrapper<OrderItem>().eq("order_id", order.getId())));
 
