@@ -1,5 +1,7 @@
 package com.frankfurtlin.mall.model.response;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -8,35 +10,24 @@ import lombok.Data;
  * @date 2022/5/4 10:35
  */
 @Data
+@ApiModel(value = "CartListRes对象", description = "返回给用户的购物车列表类")
 public class CartListRes {
 
-    /**
-     * 商品 id
-     */
+    @ApiModelProperty("商品id")
     private Long productId;
 
-    /**
-     * 商品数量
-     */
+    @ApiModelProperty("商品数量")
     private Integer quantity;
 
-    /**
-     * 商品是否选中
-     */
+    @ApiModelProperty("商品是否选中")
     private Integer selected;
 
-    /**
-     * 商品当前价格
-     */
+    @ApiModelProperty("商品当前价格")
     private Integer price;
 
-    /**
-     * 商品名称
-     */
+    @ApiModelProperty("商品名称")
     private String productName;
 
-    /**
-     * 商品图片
-     */
+    @ApiModelProperty("商品图片")
     private String productImage;
 }

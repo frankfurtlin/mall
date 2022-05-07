@@ -14,6 +14,7 @@ import com.frankfurtlin.mall.mapper.OrderMapper;
 import com.frankfurtlin.mall.model.entity.OrderItem;
 import com.frankfurtlin.mall.model.entity.Product;
 import com.frankfurtlin.mall.model.request.OrderCreateByCartReq;
+import com.frankfurtlin.mall.model.response.OrderDetailRes;
 import com.frankfurtlin.mall.service.IOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.frankfurtlin.mall.utils.OrderCodeFactory;
@@ -119,6 +120,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         cartMapper.delete(new QueryWrapper<Cart>().eq("user_id", userId).eq("selected", Constant.SELECTED_TRUE));
 
         return order.getOrderNo();
+    }
+
+    @Override
+    public OrderDetailRes detail(String orderNo){
+        OrderDetailRes orderDetailRes = new OrderDetailRes();
+
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("order_no", orderNo));
+
+        BeanUtils.copyProperties(order, orderDetailRes);
+        orderDetailRes.setOrderItemList(orderItemMapper.selectList(new QueryWrapper<OrderItem>().eq("order_id", order.getId())));
+
+        return orderDetailRes;
     }
 
     /**

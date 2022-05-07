@@ -12,8 +12,8 @@ import lombok.Data;
  * @date 2022/5/3 13:55
  * 返回给用户的商品信息类
  */
-@ApiModel(value = "ProductListRes对象", description = "返回给用户的商品类")
 @Data
+@ApiModel(value = "ProductListRes对象", description = "返回给用户的商品类")
 public class ProductListRes {
 
     @ApiModelProperty("商品id")

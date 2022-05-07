@@ -8,11 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 /**
@@ -37,4 +33,12 @@ public class OrderController {
 
         return ApiRestResponse.success(iOrderService.createByCart(orderCreateByCartReq));
     }
+
+    @ApiOperation("查询订单详情")
+    @PostMapping("/detail")
+    public ApiRestResponse<?> detail( @ApiParam("订单号") @RequestParam String orderNo){
+
+        return ApiRestResponse.success(iOrderService.detail(orderNo));
+    }
+
 }

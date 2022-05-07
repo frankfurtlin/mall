@@ -3,6 +3,7 @@ package com.frankfurtlin.mall.service;
 import com.frankfurtlin.mall.model.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.frankfurtlin.mall.model.request.OrderCreateByCartReq;
+import com.frankfurtlin.mall.model.response.OrderDetailRes;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -22,4 +23,11 @@ public interface IOrderService extends IService<Order> {
      */
     @Transactional(rollbackFor = Exception.class)
     String createByCart(OrderCreateByCartReq orderCreateByCartReq);
+
+    /**
+     * 根据订单号查询订单信息
+     * @param orderNo 订单号
+     * @return 订单信息
+     */
+    OrderDetailRes detail(String orderNo);
 }
