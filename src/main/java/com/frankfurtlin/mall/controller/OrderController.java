@@ -3,6 +3,7 @@ package com.frankfurtlin.mall.controller;
 
 import com.frankfurtlin.mall.common.ApiRestResponse;
 import com.frankfurtlin.mall.model.request.OrderCreateByCartReq;
+import com.frankfurtlin.mall.model.request.OrderCreateByProductReq;
 import com.frankfurtlin.mall.service.IOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +33,20 @@ public class OrderController {
     public ApiRestResponse<?> createByCart(@Valid @ApiParam("订单个人信息") @RequestBody OrderCreateByCartReq orderCreateByCartReq){
 
         return ApiRestResponse.success(iOrderService.createByCart(orderCreateByCartReq));
+    }
+
+    @ApiOperation("根据商品创建订单")
+    @PostMapping("/createByProduct")
+    public ApiRestResponse<?> createByProduct(@Valid @ApiParam("订单个人信息") @RequestBody OrderCreateByProductReq orderCreateByProductReq){
+
+        return ApiRestResponse.success(iOrderService.createByProduct(orderCreateByProductReq));
+    }
+
+    @ApiOperation("根据订单状态查询订单列表")
+    @PostMapping("/list")
+    public ApiRestResponse<?> list(@ApiParam("订单状态") @RequestParam Integer status, @ApiParam("页面数量") @RequestParam Integer pageNum, @ApiParam("页面大小") @RequestParam Integer pageSize ){
+
+        return ApiRestResponse.success(iOrderService.listOrder(status, pageNum, pageSize));
     }
 
     @ApiOperation("查询订单详情")

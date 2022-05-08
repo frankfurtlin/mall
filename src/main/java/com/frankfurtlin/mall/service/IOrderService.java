@@ -1,8 +1,10 @@
 package com.frankfurtlin.mall.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.frankfurtlin.mall.model.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.frankfurtlin.mall.model.request.OrderCreateByCartReq;
+import com.frankfurtlin.mall.model.request.OrderCreateByProductReq;
 import com.frankfurtlin.mall.model.response.OrderDetailRes;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,23 @@ public interface IOrderService extends IService<Order> {
      */
     @Transactional(rollbackFor = Exception.class)
     String createByCart(OrderCreateByCartReq orderCreateByCartReq);
+
+    /**
+     * 通过商品构建订单
+     * @param orderCreateByProductReq 用户订单个人信息类（商品id、商品数量）
+     * @return 订单号
+     */
+    @Transactional(rollbackFor = Exception.class)
+    String createByProduct(OrderCreateByProductReq orderCreateByProductReq);
+
+    /**
+     * 根据订单状态分页查询订单信息
+     * @param status 订单状态
+     * @param pageNum 页数
+     * @param pageSize 页大小
+     * @return 订单分页
+     */
+    Page<Order> listOrder(int status, int pageNum, int pageSize);
 
     /**
      * 根据订单号查询订单信息

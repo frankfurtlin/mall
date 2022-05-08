@@ -49,6 +49,7 @@ public enum MallExceptionEnum {
     PERSON_CART_EMPTY(10017, "购物车没有勾选商品"),
     ORDER_NOT_EXISTED(10018, "订单号无效"),
     ORDER_NOT_BELONG_YOU(10019, "该订单不属于你"),
+    ORDER_STATUS_ERROR(10020, "订单状态无效"),
 
     /**
      * 系统异常

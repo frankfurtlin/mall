@@ -90,6 +90,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return productMapper.selectPage(new Page<>(productQueryDto.getPageNum(), productQueryDto.getPageSize()), queryWrapper);
     }
 
+    /**
+     * 判断商品名称是否存在
+     * @param productName 商品名称
+     */
     private void checkProductNameExisted(String productName){
         QueryWrapper<Product> productQueryWrapper = new QueryWrapper<>();
         productQueryWrapper.eq("product_name", productName);

@@ -37,4 +37,17 @@ public class Constant {
      */
     public static final int SELECTED_TRUE = 1;
     public static final int SELECTED_FALSE = 0;
+
+    /**
+     * 订单状态
+     */
+    public interface OrderStatus{
+        int CANCEL = 0;
+        int NO_PAY = 1;
+        int HAVE_PAY = 2;
+        int HAVE_SENT = 3;
+        int HAVE_DELIVERED= 4;
+        int DONE= 5;
+    }
+
 }
