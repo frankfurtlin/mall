@@ -42,11 +42,17 @@ public class Constant {
      * 订单状态
      */
     public interface OrderStatus{
+        // 取消
         int CANCEL = 0;
+        // 未支付
         int NO_PAY = 1;
+        // 已支付
         int HAVE_PAY = 2;
+        // 已发货
         int HAVE_SENT = 3;
+        // 已送达
         int HAVE_DELIVERED= 4;
+        // 已完成
         int DONE= 5;
     }
 

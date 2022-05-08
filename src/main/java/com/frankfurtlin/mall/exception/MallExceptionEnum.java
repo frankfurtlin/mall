@@ -50,6 +50,11 @@ public enum MallExceptionEnum {
     ORDER_NOT_EXISTED(10018, "订单号无效"),
     ORDER_NOT_BELONG_YOU(10019, "该订单不属于你"),
     ORDER_STATUS_ERROR(10020, "订单状态无效"),
+    ORDER_CANNOT_CANCEL(10021, "订单不能取消"),
+    ORDER_CANNOT_PAY(10022, "订单不能支付"),
+    ORDER_CANNOT_SENT(10023, "订单不能发货"),
+    ORDER_CANNOT_DELIVER(10024, "订单不能已送达"),
+    ORDER_CANNOT_DONE(10025, "订单不能完结"),
 
     /**
      * 系统异常

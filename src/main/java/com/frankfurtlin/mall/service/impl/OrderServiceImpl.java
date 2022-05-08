@@ -9,11 +9,8 @@ import com.frankfurtlin.mall.filter.UserFilter;
 import com.frankfurtlin.mall.mapper.CartMapper;
 import com.frankfurtlin.mall.mapper.OrderItemMapper;
 import com.frankfurtlin.mall.mapper.ProductMapper;
-import com.frankfurtlin.mall.model.entity.Cart;
-import com.frankfurtlin.mall.model.entity.Order;
+import com.frankfurtlin.mall.model.entity.*;
 import com.frankfurtlin.mall.mapper.OrderMapper;
-import com.frankfurtlin.mall.model.entity.OrderItem;
-import com.frankfurtlin.mall.model.entity.Product;
 import com.frankfurtlin.mall.model.request.OrderCreateByCartReq;
 import com.frankfurtlin.mall.model.request.OrderCreateByProductReq;
 import com.frankfurtlin.mall.model.response.OrderDetailRes;
@@ -25,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -161,33 +159,155 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         Long userId = UserFilter.currentUser.getId();
 
         // 判断订单状态
-        if(status < Constant.OrderStatus.CANCEL || status > Constant.OrderStatus.DONE){
-            throw new MallException(MallExceptionEnum.ORDER_STATUS_ERROR);
-        }
+        checkOrderStatus(status);
 
         return orderMapper.selectPage(new Page<>(pageNum, pageSize), new QueryWrapper<Order>().eq("user_id", userId).eq("order_status", status));
+    }
+
+    @Override
+    public Page<Order> listAllOrder(int status, int pageNum, int pageSize){
+
+        // 校验订单状态
+        checkOrderStatus(status);
+
+        return orderMapper.selectPage(new Page<>(pageNum, pageSize), new QueryWrapper<Order>().eq("order_status", status));
     }
 
     @Override
     public OrderDetailRes detail(String orderNo){
         OrderDetailRes orderDetailRes = new OrderDetailRes();
 
-        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("order_no", orderNo));
+        Long userId = UserFilter.currentUser.getId();
 
-        // 订单号不存在，报订单不存在异常
-        if(order == null){
-            throw new MallException(MallExceptionEnum.ORDER_NOT_EXISTED);
-        }
-        // 订单对应的用户不是当前用户，报订单不属于你异常
-        if(!order.getUserId().equals(UserFilter.currentUser.getId())){
-            throw new MallException(MallExceptionEnum.ORDER_NOT_BELONG_YOU);
-        }
+        // 校验订单号
+        Order order = checkOrderNo(orderNo, userId);
 
         BeanUtils.copyProperties(order, orderDetailRes);
         orderDetailRes.setOrderItemList(orderItemMapper.selectList(new QueryWrapper<OrderItem>().eq("order_id", order.getId())));
 
         return orderDetailRes;
     }
+
+    @Override
+    public void cancel(String orderNo){
+
+        Long userId = UserFilter.currentUser.getId();
+
+        // 校验订单号
+        Order order = checkOrderNo(orderNo, userId);
+
+        // 校验订单状态 未支付、已付款未发货的订单才能取消
+        if(order.getOrderStatus() != Constant.OrderStatus.NO_PAY && order.getOrderStatus() != Constant.OrderStatus.HAVE_PAY ){
+            throw new MallException(MallExceptionEnum.ORDER_CANNOT_CANCEL);
+        }
+
+        // 根据订单 id 查询订单项列表
+        List<OrderItem> list = orderItemMapper.selectList(new QueryWrapper<OrderItem>().eq("order_id", order.getId()));
+
+        // 恢复商品库存 删除商品项
+        for(OrderItem item : list){
+            // 恢复商品库存
+            Product product = productMapper.selectById(item.getProductId());
+            int remain = product.getStock() + item.getQuantity();
+            product.setStock(remain);
+            productMapper.updateById(product);
+
+            // 删除订单商品项
+            orderItemMapper.deleteById(item.getId());
+        }
+
+        // 更改订单状态
+        order.setOrderStatus(Constant.OrderStatus.CANCEL);
+        orderMapper.updateById(order);
+    }
+
+    @Override
+    public void pay(String orderNo){
+
+        Long userId = UserFilter.currentUser.getId();
+
+        // 校验订单号
+        Order order = checkOrderNo(orderNo, userId);
+
+        // 校验订单状态 未支付的订单才能支付
+        if(order.getOrderStatus() != Constant.OrderStatus.NO_PAY){
+            throw new MallException(MallExceptionEnum.ORDER_CANNOT_PAY);
+        }
+
+        // 更改订单状态
+        order.setOrderStatus(Constant.OrderStatus.HAVE_PAY);
+        order.setPaymentTime(new Date());
+        orderMapper.updateById(order);
+    }
+
+    @Override
+    public void sent(String orderNo){
+
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("order_no", orderNo));
+
+        if(order == null){
+            throw new MallException(MallExceptionEnum.ORDER_NOT_EXISTED);
+        }
+
+        // 校验订单状态 已支付的订单才能发货
+        if(order.getOrderStatus() != Constant.OrderStatus.HAVE_PAY){
+            throw new MallException(MallExceptionEnum.ORDER_CANNOT_SENT);
+        }
+
+        // 更改订单状态
+        order.setOrderStatus(Constant.OrderStatus.HAVE_SENT);
+        order.setDeliveryTime(new Date());
+        orderMapper.updateById(order);
+    }
+
+    @Override
+    public void deliver(String orderNo){
+
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("order_no", orderNo));
+
+        if(order == null){
+            throw new MallException(MallExceptionEnum.ORDER_NOT_EXISTED);
+        }
+
+        // 校验订单状态 已发送的订单才能送达
+        if(order.getOrderStatus() != Constant.OrderStatus.HAVE_SENT){
+            throw new MallException(MallExceptionEnum.ORDER_CANNOT_DELIVER);
+        }
+
+        // 更改订单状态
+        order.setOrderStatus(Constant.OrderStatus.HAVE_DELIVERED);
+        orderMapper.updateById(order);
+    }
+
+    @Override
+    public void done(String orderNo){
+
+        User user = UserFilter.currentUser;
+
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("order_no", orderNo));
+
+        // 订单不存在 报异常
+        if(order == null){
+            throw new MallException(MallExceptionEnum.ORDER_NOT_EXISTED);
+        }
+
+        // 判断订单是否属于该用户
+        if(user.getRole() != Constant.ROLE && !order.getUserId().equals(user.getId())){
+            throw new MallException(MallExceptionEnum.ORDER_NOT_BELONG_YOU);
+        }
+
+        // 校验订单状态 已送达的订单才能完结
+        if(order.getOrderStatus() != Constant.OrderStatus.HAVE_DELIVERED){
+            throw new MallException(MallExceptionEnum.ORDER_CANNOT_DONE);
+        }
+
+        // 更改订单状态
+        order.setOrderStatus(Constant.OrderStatus.DONE);
+        order.setReceiveTime(new Date());
+        orderMapper.updateById(order);
+    }
+
+
 
     /**
      * 根据用户 id 查询用户已选择的购物车项
@@ -232,6 +352,39 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         item.setTotalPrice(quantity * product.getPrice());
 
         return item;
+    }
+
+    /**
+     * 根据用户 id、订单号判断订单号是否有效，订单号是否属于该用户 并返回订单信息
+     * @param orderNo 订单号
+     * @param userId 用户 id
+     * @return 订单信息
+     */
+    private Order checkOrderNo(String orderNo, Long userId){
+        Order order = orderMapper.selectOne(new QueryWrapper<Order>().eq("order_no", orderNo));
+
+        // 订单号不存在，报订单不存在异常
+        if(order == null){
+            throw new MallException(MallExceptionEnum.ORDER_NOT_EXISTED);
+        }
+
+        // 订单对应的用户不是当前用户，报订单不属于你异常
+        if(!order.getUserId().equals(userId)){
+            throw new MallException(MallExceptionEnum.ORDER_NOT_BELONG_YOU);
+        }
+
+        return order;
+    }
+
+    /**
+     * 校验订单状态
+     * @param status 订单状态
+     */
+    void checkOrderStatus(int status){
+        // 判断订单状态
+        if(status < Constant.OrderStatus.CANCEL || status > Constant.OrderStatus.DONE){
+            throw new MallException(MallExceptionEnum.ORDER_STATUS_ERROR);
+        }
     }
 
 }

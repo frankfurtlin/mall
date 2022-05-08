@@ -49,11 +49,63 @@ public class OrderController {
         return ApiRestResponse.success(iOrderService.listOrder(status, pageNum, pageSize));
     }
 
+    @ApiOperation("后台查询订单列表")
+    @PostMapping("/admin/list")
+    public ApiRestResponse<?> listAll(@ApiParam("订单状态") @RequestParam Integer status, @ApiParam("页面数量") @RequestParam Integer pageNum, @ApiParam("页面大小") @RequestParam Integer pageSize ){
+
+        return ApiRestResponse.success(iOrderService.listAllOrder(status, pageNum, pageSize));
+    }
+
     @ApiOperation("查询订单详情")
     @PostMapping("/detail")
     public ApiRestResponse<?> detail( @ApiParam("订单号") @RequestParam String orderNo){
 
         return ApiRestResponse.success(iOrderService.detail(orderNo));
+    }
+
+    @ApiOperation("取消订单")
+    @PostMapping("/cancel")
+    public ApiRestResponse<?> cancel( @ApiParam("订单号") @RequestParam String orderNo){
+
+        iOrderService.cancel(orderNo);
+
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("支付订单")
+    @PostMapping("/pay")
+    public ApiRestResponse<?> pay( @ApiParam("订单号") @RequestParam String orderNo){
+
+        iOrderService.pay(orderNo);
+
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("订单发货")
+    @PostMapping("/admin/sent")
+    public ApiRestResponse<?> sent( @ApiParam("订单号") @RequestParam String orderNo){
+
+        iOrderService.sent(orderNo);
+
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("订单送达")
+    @PostMapping("/admin/deliver")
+    public ApiRestResponse<?> deliver( @ApiParam("订单号") @RequestParam String orderNo){
+
+        iOrderService.deliver(orderNo);
+
+        return ApiRestResponse.success();
+    }
+
+    @ApiOperation("订单完结")
+    @PostMapping("/done")
+    public ApiRestResponse<?> done( @ApiParam("订单号") @RequestParam String orderNo){
+
+        iOrderService.done(orderNo);
+
+        return ApiRestResponse.success();
     }
 
 }
