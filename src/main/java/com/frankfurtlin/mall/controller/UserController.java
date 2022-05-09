@@ -14,10 +14,12 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 /**
  * <p>
@@ -29,6 +31,7 @@ import javax.validation.Valid;
  */
 @Api(tags = "用户管理")
 @RestController
+@Validated
 @RequestMapping("/mall/user")
 public class UserController {
     @Autowired
@@ -36,7 +39,16 @@ public class UserController {
 
     @ApiOperation("用户注册")
     @PostMapping("/register")
-    public ApiRestResponse<?> register(@ApiParam("用户名") @RequestParam String username, @ApiParam("用户密码") @RequestParam String password){
+    public ApiRestResponse<?> register(
+            @ApiParam("用户名")
+            @Valid
+            @Size(min = 2, max = 16, message = "用户名长度为2-16之间")
+            @RequestParam String username,
+
+            @ApiParam("用户密码")
+            @Valid
+            @Size(min = 8, max = 20, message = "用户密码长度在8-20之间")
+            @RequestParam String password){
         if(StringUtils.isEmpty(username)){
             return ApiRestResponse.error(MallExceptionEnum.NEED_USER_NAME);
         }
@@ -78,12 +90,13 @@ public class UserController {
         if(!iUserService.updateById(user)){
             return ApiRestResponse.error(MallExceptionEnum.DATABASE_FAILED);
         }
+        httpSession.setAttribute(Constant.MALL_USER, user);
         return ApiRestResponse.success();
     }
 
     @ApiOperation("修改用户密码")
     @PostMapping("/password")
-    public ApiRestResponse<?> changePassword(@ApiParam("旧密码") @RequestParam String password, @ApiParam("新密码") @RequestParam String newPassword, HttpSession httpSession){
+    public ApiRestResponse<?> changePassword(@ApiParam("旧密码") @RequestParam String password, @ApiParam("新密码") @RequestParam String newPassword){
 
         User user = iUserService.getById(UserFilter.currentUser.getId());
         iUserService.changePassword(user, password, newPassword);

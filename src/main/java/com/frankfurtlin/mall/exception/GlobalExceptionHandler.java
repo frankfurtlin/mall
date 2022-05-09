@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +53,31 @@ public class GlobalExceptionHandler {
     public Object handlerMethodArgumentNotValidException(MethodArgumentNotValidException e){
         logger.error("MethodArgumentNotValidException", e);
         return handleBindingResult(e.getBindingResult());
+    }
+
+    /**
+     * 处理 Validation 由 @Validated 引起的 ConstraintViolationException 异常
+     * @param e ConstraintViolationException 异常
+     * @return 统一异常返回
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    public ApiRestResponse<?> handlerMethodConstraintViolationException(ConstraintViolationException e){
+        logger.error("ConstraintViolationException", e);
+
+        List<String> list = new ArrayList<>();
+
+        // 将 ConstraintViolationException 异常报错的 message 添加到 list 中
+        for(ConstraintViolation<?> constraintViolation : e.getConstraintViolations()){
+            list.add(constraintViolation.getMessageTemplate());
+        }
+
+        if (list.size() == 0) {
+            return ApiRestResponse.error(MallExceptionEnum.REQUEST_PARAM_ERROR);
+        }
+        //根据 ConstraintViolationException 异常的具体错误信息，构建 ApiRestResponse 统一返回对象；
+        return ApiRestResponse.error(MallExceptionEnum.REQUEST_PARAM_ERROR.getCode(), list.toString());
+
     }
 
     /**
