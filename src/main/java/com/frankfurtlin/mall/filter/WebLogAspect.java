@@ -53,7 +53,7 @@ public class WebLogAspect {
         //目标类/目标方法的：类和方法名
         log.info("CLASS_METHOD" + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
         //请求的参数
-        log.info("ARGS :" + Arrays.toString(joinPoint.getArgs()));
+        log.info("REQUEST_ARGS :" + Arrays.toString(joinPoint.getArgs()));
     }
 
     /**
